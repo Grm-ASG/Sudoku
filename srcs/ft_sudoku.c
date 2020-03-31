@@ -1,13 +1,14 @@
 #include "header.h"
 int             ft_duplicate_simb(char **argv, char ****map, int i, int j)
 {
-    if (j == 8 && argv[i][j+1] != '\0' ||
+    if ((j == 8 && argv[i][j+1] != '\0') ||
     ((argv[i][j] < '0' && argv[i][j] != '.') ||
     (argv[i][j] > '9' && argv[i][j] != '.')))
         return (0);
     **map[i][j] = argv[i][j];
     if (j == 8)
         **map[i][j+1] = '\0';
+    return (1);
 }
 
 int             ft_map(char **argv, char ***map, int *blank)
@@ -83,15 +84,15 @@ void			ft_sudoku(char **argv)
     char    **map;
     int     blank;
 
-    if (!map = ft_create_map())
+    if (!(map = ft_create_map()))
         if (ft_map(argv, &map, &blank))
         {
-            ft_solve_sudoku(&map, blank);
+//            ft_solve_sudoku(&map, blank);
             ft_print_sudoku(map);
         }
     free(map);
 }
-
+/*
 void            ft_solve_sudoku(char ***map, int blank)
 {:
     while(blank)
@@ -99,3 +100,4 @@ void            ft_solve_sudoku(char ***map, int blank)
 
     }
 }
+*/
