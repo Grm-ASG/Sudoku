@@ -31,11 +31,44 @@ int             ft_map(char **argv, char ***map)
     return (1);
 }
 
+void            ft_print_sudoku(char **map)
+{
+    int i;
+    int j;
+
+    i = 0;
+    while(map[i])
+    {
+        j = 0;
+        while(map[i][j])
+        {
+            ft_putchar(map[i][j]);
+            if (map[i][j+1] != '\0')
+                ft_putchar(' ');
+            j++;
+        }
+        ft_putchar('\n');
+        i++;
+    }
+}
+
 void			ft_sudoku(char **argv)
 {
-    char **map;
+    char    **map;
+    int     i;
 
+    i = 0;
     map = (char **)malloc(sizeof(char *) * 10);
+    while(i < 10)
+    {
+        map[i] = (char *)malloc(sizeof(char) * 10);
+        if (map[i] == NULL)
+        {
+            free(map);
+            return ;
+        }
+        i++;
+    }
     if (map == NULL)
         return ;
     if (ft_map(argv, &map))
