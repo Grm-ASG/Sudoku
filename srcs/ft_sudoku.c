@@ -64,7 +64,7 @@ char            **ft_create_map(void)
     map = (char **)malloc(sizeof(char *) * 10);
     if (!(map == NULL))
     {
-        while (i < 10) {
+        while (i < 9) {
             map[i] = (char *)malloc(sizeof(char) * 10);
             if (map[i] == NULL)
             {
@@ -73,6 +73,7 @@ char            **ft_create_map(void)
             }
             i++;
         }
+        map[9] = '\0';
     }
     return (map);
 }
