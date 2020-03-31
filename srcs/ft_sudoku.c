@@ -10,10 +10,11 @@ int             ft_duplicate_simb(char **argv, char ****map, int i, int j)
         **map[i][j+1] = '\0';
 }
 
-int             ft_map(char **argv, char ***map)
+int             ft_map(char **argv, char ***map, int *blank)
 {
     int i, j;
 
+    *blank = 0;
     i = 1;
     while(i <= 9)
     {
@@ -25,6 +26,8 @@ int             ft_map(char **argv, char ***map)
                 ft_putstr(ERR);
                 return (0);
             }
+            if (argv[i][j] == '.')
+                (*blank)++;
         }
         i++;
     }
@@ -52,29 +55,46 @@ void            ft_print_sudoku(char **map)
     }
 }
 
-void			ft_sudoku(char **argv)
+char            **ft_create_map(void)
 {
     char    **map;
     int     i;
 
     i = 0;
     map = (char **)malloc(sizeof(char *) * 10);
-    while(i < 10)
+    if (!(map == NULL))
     {
-        map[i] = (char *)malloc(sizeof(char) * 10);
-        if (map[i] == NULL)
-        {
-            free(map);
-            return ;
+        while (i < 10) {
+            map[i] = (char *)malloc(sizeof(char) * 10);
+            if (map[i] == NULL)
+            {
+                free(map);
+                return (NULL);
+            }
+            i++;
         }
-        i++;
     }
-    if (map == NULL)
-        return ;
-    if (ft_map(argv, &map))
-    {
-        ft_solve_sudoku(&map);
-        ft_print_sudoku(map);
-    }
+    return (map);
+}
+
+void			ft_sudoku(char **argv)
+{
+    char    **map;
+    int     blank;
+
+    if (!map = ft_create_map())
+        if (ft_map(argv, &map, &blank))
+        {
+            ft_solve_sudoku(&map, blank);
+            ft_print_sudoku(map);
+        }
     free(map);
+}
+
+void            ft_solve_sudoku(char ***map, int blank)
+{:
+    while(blank)
+    {
+
+    }
 }
