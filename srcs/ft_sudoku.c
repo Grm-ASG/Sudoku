@@ -1,3 +1,6 @@
+/*delete*/
+#include <stdio.h>
+
 #include "header.h"
 int             ft_duplicate_simb(char **argv, char ****map, int i, int j)
 {
@@ -108,7 +111,28 @@ char		ft_vert(char **map, char res, int i, int j)
 
 char		ft_cube(char **map, char res, int i, int j)
 {
+	int a;
+	int b;
+	int z;
+	int x;
 
+	a = (i - 1) / 3 + 1;
+	b = (j - 1) / 3 + 1;
+
+	z = 0;
+	while (a * 3 - 3 + z <= a * 3 - 1)
+	{
+		x = 0;
+		while (b * 3 - 3 + x <= b * 3 - 1)
+		{
+			if (res == map[a * 3 - 3 + z][b * 3 - 3 + x])
+				return (0);
+			x++;
+		}
+		z++;
+
+	}
+	return (1);
 }
 
 char		ft_check_all(char **map, int i, int j)
@@ -123,16 +147,15 @@ char		ft_check_all(char **map, int i, int j)
 		ft_cube(map, res, i, j))
 			return (res);
 		res += 1;
-
 	}
-	return (0);
+	return ('0');
 }
+
 
 char		ft_check(char **map, int *i, int *j)
 {
 	while (*i < 9)
 	{
-		*j = 0;
 		while (*j < 9)
 		{
 			if (map[*i][*j] == '.')
@@ -141,8 +164,10 @@ char		ft_check(char **map, int *i, int *j)
 			}
 			(*j)++;
 		}
+		*j = 0;
 		(*i)++;
 	}
+	return ('0');
 }
 
 char            **ft_solve_sudoku(char **map, int blank)
@@ -156,22 +181,27 @@ char            **ft_solve_sudoku(char **map, int blank)
 	while (blank)
 	{
 		guess = ft_check(map, &i, &j);
+		/*delete*/
+		ft_print_sudoku(map);
+		printf("\nguess = %c | i = %d | j = %d\n-----------------\n", guess, i, j);
+		/*delete*/
+		map[i][j] = guess;
 	}
 	return (map);
 }
 
 void			ft_sudoku(char **argv)
 {
-    char    **map;
-    int     blank;
+	char    **map;
+	int     blank;
 
-    if ((map = ft_create_map()))
-    {
-	if (ft_map(argv, &map, &blank))
+	if ((map = ft_create_map()))
 	{
-            map = ft_solve_sudoku(map, blank);
-	    ft_print_sudoku(map);
+		if (ft_map(argv, &map, &blank))
+		{
+		    map = ft_solve_sudoku(map, blank);
+		    ft_print_sudoku(map);
+		}
 	}
-    }
-    free(map);
+	free(map);
 }
