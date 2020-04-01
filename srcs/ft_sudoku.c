@@ -2,12 +2,13 @@
 int             ft_duplicate_simb(char **argv, char ****map, int i, int j)
 {
     if ((j == 8 && argv[i][j+1] != '\0') ||
-    ((argv[i][j] < '0' && argv[i][j] != '.') ||
-    (argv[i][j] > '9' && argv[i][j] != '.')))
+    (argv[i][j] < '0' && argv[i][j] > '9' && argv[i][j] != '.'))
+    {
         return (0);
-    **map[i][j] = argv[i][j];
+    }
+    (**map)[i-1][j] = argv[i][j];
     if (j == 8)
-        **map[i][j+1] = '\0';
+        (**map)[i-1][j+1] = '\0';
     return (1);
 }
 
@@ -22,13 +23,14 @@ int             ft_map(char **argv, char ***map, int *blank)
         j = 0;
         while(j < 9)
         {
-            if (!(ft_duplicate_simb(argv, &map, i, j)))
+            if (!ft_duplicate_simb(argv, &map, i, j))
             {
                 ft_putstr(ERR);
                 return (0);
             }
             if (argv[i][j] == '.')
                 (*blank)++;
+	    j++;
         }
         i++;
     }
@@ -84,14 +86,19 @@ void			ft_sudoku(char **argv)
     char    **map;
     int     blank;
 
-    if (!(map = ft_create_map()))
-        if (ft_map(argv, &map, &blank))
-        {
+    if ((map = ft_create_map()))
+    {
+	if (ft_map(argv, &map, &blank))
+	{
 //            ft_solve_sudoku(&map, blank);
-            ft_print_sudoku(map);
-        }
+	    ft_print_sudoku(map);
+	}
+    }
     free(map);
 }
+
+
+
 /*
 void            ft_solve_sudoku(char ***map, int blank)
 {:
