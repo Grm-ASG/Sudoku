@@ -10,15 +10,15 @@ OBJECTS = $(PATH_OBJ)*.o
 OPTIONS = -c -I $(HEADER)
 
 all:
-	mkdir $(PATH_OBJ)
-	$(CC) $(FLAGS) $(OPTIONS) $(SOURCE)
-	mv *.o $(PATH_OBJ)
-	$(CC) $(OBJECTS) -o $(NAME)
+	@mkdir $(PATH_OBJ)
+	@$(CC) $(FLAGS) $(OPTIONS) $(SOURCE)
+	@mv *.o $(PATH_OBJ)
+	@$(CC) $(OBJECTS) -o $(NAME)
 
 clean:
-	/bin/rm -rf $(PATH_OBJ)
+	@/bin/rm -rf $(PATH_OBJ)
 
 fclean: clean
-	/bin/rm -f $(NAME)
+	@/bin/rm -f $(NAME)
 
 re: fclean all
