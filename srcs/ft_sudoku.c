@@ -1,5 +1,4 @@
 #include "header.h"
-#include <stdio.h>
 
 int			 ft_duplicate_simb(char **argv, char **map, int i, int j)
 {
