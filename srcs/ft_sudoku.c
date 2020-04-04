@@ -212,9 +212,9 @@ char			**ft_solve_sudoku(char **map, int blank, t_list **pp_list)
 		res = '1';
 		blank--;
 	}
+	ft_list_clear(pp_list);
 	if (flag)
 		return (0);
-	ft_list_clear(pp_list);
 	return (map);
 }
 
