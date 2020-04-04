@@ -1,16 +1,16 @@
 #include "header.h"
 #include <stdio.h>
 
-int			 ft_duplicate_simb(char **argv, char ****map, int i, int j)
+int			 ft_duplicate_simb(char **argv, char **map, int i, int j)
 {
 	if ((j == 8 && argv[i+1][j+1] != '\0') ||
 	((argv[i+1][j] < '0' || argv[i+1][j] > '9') && argv[i+1][j] != '.'))
 	{
 		return (1);
 	}
-	(**map)[i][j] = argv[i+1][j];
+	map[i][j] = argv[i+1][j];
 	if (j == 8)
-		(**map)[i][j+1] = '\0';
+		map[i][j+1] = '\0';
 	return (0);
 }
 
@@ -137,7 +137,7 @@ char		ft_check(char **map, int *i, int *j, char res)
 	return ('0');
 }
 
-void			ft_remove_i_j(int *i, int *j, t_list **pp_back_up, char *res)
+void			ft_remove_i_j(int *i, int *j, t_list **pp_back_up, char *res, int *flag)
 {
 	t_list *pp_list;
 
@@ -148,6 +148,8 @@ void			ft_remove_i_j(int *i, int *j, t_list **pp_back_up, char *res)
 	*j = pp_list->prev->j;
 	*res = pp_list->prev->res + 1;
 	pp_list->prev->res = '.';
+	if (pp_list->prev->prev == NULL)
+		*flag = 1;
 }
 
 void			ft_guess_to_list(char guess, t_list **pp_back_up, int i, int j)
@@ -179,18 +181,29 @@ char			**ft_solve_sudoku(char **map, int blank, t_list **pp_list)
 {
 	char	guess;
 	char	res;
+	int	flag;
+	int	fs_fl;
 	int	i;
 	int	j;
 
 	res = '1';
 	i = 0;
 	j = 0;
+	fs_fl = 1;
+	flag = 0;
 	while (blank)
 	{
 		guess = ft_check(map, &i, &j, res);
+		if (flag || (guess == '0' && fs_fl))
+		{
+			flag = 1;
+			break;
+		}
+		else
+			fs_fl = 0;
 		if (guess == '0')
 		{
-			ft_remove_i_j(&i, &j, pp_list, &res);
+			ft_remove_i_j(&i, &j, pp_list, &res, &flag);
 			map[i][j] = '.';
 			blank++;
 			continue;
@@ -200,6 +213,8 @@ char			**ft_solve_sudoku(char **map, int blank, t_list **pp_list)
 		res = '1';
 		blank--;
 	}
+	if (flag)
+		return (0);
 	ft_list_clear(pp_list);
 	return (map);
 }
@@ -229,7 +244,7 @@ void			ft_list_push_back(t_list ***ppp_list, int i, int j)
 	(**ppp_list) = tmp;
 }
 
-int			ft_map(char **argv, char ***map, int *blank, t_list **pp_list)
+int			ft_map(char **argv, char **map, int *blank, t_list **pp_list)
 {
 	int		i;
 	int		j;
@@ -243,7 +258,7 @@ int			ft_map(char **argv, char ***map, int *blank, t_list **pp_list)
 		j = 0;
 		while(j < 9)
 		{
-			if (ft_duplicate_simb(argv, &map, i, j))
+			if (ft_duplicate_simb(argv, map, i, j))
 			{
 				ft_putstr(ERR);
 				return (0);
@@ -269,6 +284,11 @@ int			ft_map(char **argv, char ***map, int *blank, t_list **pp_list)
 		}
 		i++;
 	}
+	if (*blank == 0 || *blank >= 65)
+	{
+		ft_putstr(ERR);
+		return (0);
+	}
 	while ((*pp_list)->prev != NULL)
 			(*pp_list) = (*pp_list)->prev;
 	(*back_up) = (*pp_list);
@@ -282,10 +302,12 @@ void			ft_sudoku(char **argv)
 	int	blank;
 
 	if ((map = ft_create_map()))
-		if (ft_map(argv, &map, &blank, &p_list))
+		if (ft_map(argv, map, &blank, &p_list))
 		{
-			map = ft_solve_sudoku(map, blank, &p_list);
-			ft_print_sudoku(map);
+			if ((map = ft_solve_sudoku(map, blank, &p_list)))
+				ft_print_sudoku(map);
+			else
+				ft_putstr(ERR);
 		}
 	free(map);
 }

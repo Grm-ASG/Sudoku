@@ -1,2 +1,2 @@
 # Sudoku
-sorry for this shit of code^_^
+sorry for this shit of code ^_^
